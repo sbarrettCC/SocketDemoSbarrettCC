@@ -4,14 +4,14 @@
 OutputWindow::OutputWindow() : lineN(0)
 {
     output = GetStdHandle(STD_OUTPUT_HANDLE);
-    MoveCursorToScreenBottom();
+   // MoveCursorToScreenBottom();
 }
 
 void OutputWindow::Write(std::string msg)
 {
     _CONSOLE_SCREEN_BUFFER_INFO conInfo;
     GetConsoleScreenBufferInfo(output, &conInfo);
-    SetConsoleCursorPosition(output, COORD{0, lineN});
+    SetConsoleCursorPosition(output, COORD{ 0, lineN });
     std::cout << msg;
     lineN++;
     if (lineN % (conInfo.dwSize.Y - 2) == 0)
@@ -40,7 +40,7 @@ void OutputWindow::ClearLine(int y)
 {
     _CONSOLE_SCREEN_BUFFER_INFO conInfo;
     GetConsoleScreenBufferInfo(output, &conInfo);
-    SetConsoleCursorPosition(output, COORD{0, short(conInfo.dwSize.Y - y)});
+    SetConsoleCursorPosition(output, COORD{ 0, short(conInfo.dwSize.Y - y) });
     for (int i = 0; i < conInfo.dwSize.X - 1; i++)
     {
         std::cout << " ";
@@ -88,11 +88,11 @@ int OutputWindow::Scroll(int lines)
     // Scroll up one line.
 
     if (!ScrollConsoleScreenBuffer(
-            output,          // screen buffer handle
-            &srctScrollRect, // scrolling rectangle
-            &srctClipRect,   // clipping rectangle
-            coordDest,       // top left destination cell
-            &chiFill))       // fill character and color
+        output,          // screen buffer handle
+        &srctScrollRect, // scrolling rectangle
+        &srctClipRect,   // clipping rectangle
+        coordDest,       // top left destination cell
+        &chiFill))       // fill character and color
     {
         printf("ScrollConsoleScreenBuffer failed %d\n", GetLastError());
         return 1;
@@ -105,5 +105,5 @@ void OutputWindow::MoveCursorToScreenBottom()
 {
     _CONSOLE_SCREEN_BUFFER_INFO conInfo;
     GetConsoleScreenBufferInfo(output, &conInfo);
-    SetConsoleCursorPosition(output, COORD{0, short(conInfo.dwSize.Y - short(1))});
+    SetConsoleCursorPosition(output, COORD{ 0, short(conInfo.dwSize.Y - short(1)) });
 }
